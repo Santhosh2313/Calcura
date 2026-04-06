@@ -26,6 +26,7 @@ class CalculatorLogic {
     this._stored         = 0;      // left-hand operand
     this._operator       = null;   // pending operator string
     this._justEvaluated  = false;  // true right after =
+    this._awaitingOpd    = false;  // true right after operator
     this._lastOperand    = 0;      // for repeating =
     this._lastOperator   = null;
     this._error          = false;
@@ -44,10 +45,11 @@ class CalculatorLogic {
   inputDigit(digit) {
     if (this._error) { this._clearError(); }
 
-    if (this._justEvaluated) {
+    if (this._justEvaluated || this._awaitingOpd) {
       this._current       = digit;
+      if (this._justEvaluated) this._expression = '';
       this._justEvaluated = false;
-      this._expression    = '';
+      this._awaitingOpd   = false;
     } else if (this._current === '0' && digit !== '.') {
       this._current = digit;
     } else {
@@ -62,10 +64,11 @@ class CalculatorLogic {
   inputDecimal() {
     if (this._error) { this._clearError(); }
 
-    if (this._justEvaluated) {
+    if (this._justEvaluated || this._awaitingOpd) {
       this._current       = '0.';
+      if (this._justEvaluated) this._expression = '';
       this._justEvaluated = false;
-      this._expression    = '';
+      this._awaitingOpd   = false;
       return;
     }
     if (!this._current.includes('.')) {
@@ -82,6 +85,13 @@ class CalculatorLogic {
    */
   inputOperator(op) {
     if (this._error) return;
+
+    if (this._awaitingOpd) {
+      this._operator = op;
+      this._expression = `${this._formatExpr(this._stored)} ${op}`;
+      return;
+    }
+
     const currentVal = this._parseCurrent();
     if (currentVal === null) return;
 
@@ -96,6 +106,7 @@ class CalculatorLogic {
 
     this._operator      = op;
     this._justEvaluated = false;
+    this._awaitingOpd   = true;
     this._expression    = `${this._formatExpr(this._stored)} ${op}`;
   }
 
