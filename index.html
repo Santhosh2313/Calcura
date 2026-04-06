@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⊞ Calcura — Premium Scientific Calculator</title>
+  <meta name="description" content="Calcura is a premium dark-luxury scientific calculator with glassmorphism UI, smooth animations, and full keyboard support." />
+  <meta name="theme-color" content="#0f0f0f" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Calcura — Premium Scientific Calculator" />
+  <meta property="og:description" content="A dark-luxury scientific calculator with stunning animations and keyboard support." />
+  <meta property="og:type" content="website" />
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+  </div>
+
+  <main class="calc-shell" role="main">
+    <header class="calc-titlebar">
+      <span class="calc-icon" aria-hidden="true">⊞</span>
+      <span class="calc-title">Calcura</span>
+    </header>
+
+    <!-- Display Panel -->
+    <section class="display" aria-label="Calculator display">
+      <div class="display-expr"   id="display-expr"  aria-live="polite"></div>
+      <div class="display-main"   id="display-main"  aria-live="assertive">0</div>
+    </section>
+
+    <!-- Button Grid -->
+    <section class="btn-grid" id="btn-grid" aria-label="Calculator buttons">
+      <!-- Injected by app.js -->
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+/* ============================================================
+   Calcura — Premium Scientific Calculator
+   style.css
+   ============================================================ */
+
+/* ── CSS Custom Properties ─────────────────────────────────── */
+:root {
+  --bg:            #0f0f0f;
+  --border:        #1e1e1e;
+  --display-bg:    #141414;
+  --display-bdr:   #252525;
+  --text-pri:      #e8e8e8;
+  --text-sec:      #555555;
+
+  /* number buttons */
+  --num-bg:    #1c1c1c;
+  --num-fg:    #e0e0e0;
+  --num-hov:   #2a2a2a;
+  --num-prs:   #111111;
+
+  /* operator buttons */
+  --op-bg:     #1a2a2a;
+  --op-fg:     #00d4aa;
+  --op-hov:    #1e3333;
+  --op-prs:    #0f2020;
+
+  /* equals button */
+  --eq-bg:     #00d4aa;
+  --eq-fg:     #0a0a0a;
+  --eq-hov:    #00f0c0;
+  --eq-prs:    #009980;
+
+  /* clear buttons */
+  --cl-bg:     #2a1a1a;
+  --cl-fg:     #ff5f5f;
+  --cl-hov:    #331a1a;
+  --cl-prs:    #1a0f0f;
+
+  /* function buttons */
+  --fn-bg:     #1a1a2a;
+  --fn-fg:     #7a9fff;
+  --fn-hov:    #1f1f33;
+  --fn-prs:    #111122;
+
+  --radius-btn: 10px;
+  --gap:        10px;
+  --pad:        16px;
+}
+
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── Ambient glow background ────────────────────────────────── */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+}
+
+.glow-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #00d4aa, transparent 70%);
+  top: -150px;
+  left: -150px;
+  animation: drift1 18s ease-in-out infinite alternate;
+}
+
+.glow-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #7a9fff, transparent 70%);
+  bottom: -100px;
+  right: -100px;
+  animation: drift2 22s ease-in-out infinite alternate;
+}
+
+@keyframes drift1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(80px, 60px) scale(1.1); }
+}
+
+@keyframes drift2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-60px, -40px) scale(1.15); }
+}
+
+/* ── Calculator shell ───────────────────────────────────────── */
+.calc-shell {
+  position: relative;
+  z-index: 1;
+  width: 420px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px #252525,
+    0 30px 80px rgba(0, 0, 0, 0.8),
+    0 0 60px rgba(0, 212, 170, 0.04);
+}
+
+/* ── Title bar ──────────────────────────────────────────────── */
+.calc-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px 8px;
+  background: var(--bg);
+  border-bottom: 1px solid #161616;
+}
+
+.calc-icon {
+  font-size: 14px;
+  color: var(--op-fg);
+  opacity: 0.8;
+}
+
+.calc-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #383838;
+  user-select: none;
+}
+
+/* ── Display panel ──────────────────────────────────────────── */
+.display {
+  background: var(--display-bg);
+  border-top: 1px solid var(--display-bdr);
+  border-bottom: 1px solid var(--display-bdr);
+  padding: 14px 20px 16px;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.display-expr {
+  text-align: right;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--text-sec);
+  min-height: 20px;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.display-main {
+  text-align: right;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--text-pri);
+  line-height: 1.1;
+  letter-spacing: -1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.05s linear;
+  user-select: none;
+}
+
+.display-main.size-md { font-size: 30px; }
+.display-main.size-sm { font-size: 24px; }
+
+/* ── Button grid ────────────────────────────────────────────── */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--gap);
+  padding: var(--pad);
+  background: var(--bg);
+}
+
+/* ── Shared button base ─────────────────────────────────────── */
+.btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 68px;
+  border: none;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 18px;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.15s ease,
+    transform 0.08s ease,
+    box-shadow 0.15s ease;
+  overflow: hidden;
+}
+
+/* Ripple layer */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+
+.btn:focus-visible {
+  outline: 2px solid #00d4aa;
+  outline-offset: 2px;
+}
+
+/* ── Number buttons ─────────────────────────────────────────── */
+.btn-num {
+  background: var(--num-bg);
+  color: var(--num-fg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.btn-num:hover  { background: var(--num-hov); box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+.btn-num:active { background: var(--num-prs); transform: translateY(1px); box-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+
+/* ── Operator buttons ───────────────────────────────────────── */
+.btn-op {
+  background: var(--op-bg);
+  color: var(--op-fg);
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(0,212,170,0.08);
+}
+.btn-op:hover  { background: var(--op-hov); box-shadow: 0 4px 16px rgba(0,212,170,0.1); }
+.btn-op:active { background: var(--op-prs); transform: translateY(1px); }
+
+/* ── Equals button ──────────────────────────────────────────── */
+.btn-eq {
+  background: var(--eq-bg);
+  color: var(--eq-fg);
+  font-size: 22px;
+  box-shadow: 0 4px 20px rgba(0,212,170,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.btn-eq:hover  {
+  background: var(--eq-hov);
+  box-shadow: 0 6px 28px rgba(0,240,192,0.45), inset 0 1px 0 rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+.btn-eq:active {
+  background: var(--eq-prs);
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(0,153,128,0.4);
+}
+
+/* ── Clear buttons ──────────────────────────────────────────── */
+.btn-cl {
+  background: var(--cl-bg);
+  color: var(--cl-fg);
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,95,95,0.06);
+}
+.btn-cl:hover  { background: var(--cl-hov); box-shadow: 0 4px 16px rgba(255,95,95,0.12); }
+.btn-cl:active { background: var(--cl-prs); transform: translateY(1px); }
+
+/* ── Function buttons ───────────────────────────────────────── */
+.btn-fn {
+  background: var(--fn-bg);
+  color: var(--fn-fg);
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(122,159,255,0.06);
+}
+.btn-fn:hover  { background: var(--fn-hov); box-shadow: 0 4px 16px rgba(122,159,255,0.12); }
+.btn-fn:active { background: var(--fn-prs); transform: translateY(1px); }
+
+/* ── Special layout: 0 spans 2 cols ────────────────────────── */
+.btn-span2 {
+  grid-column: span 2;
+}
+
+/* ── Spacer (empty cell) ────────────────────────────────────── */
+.btn-spacer {
+  height: 68px;
+  grid-column: span 1;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* ── Active operator highlight ──────────────────────────────── */
+.btn.btn-op.active-op {
+  background: var(--op-fg);
+  color: var(--bg);
+  box-shadow: 0 4px 20px rgba(0,212,170,0.4);
+}
+
+/* ── Pressed state animation ────────────────────────────────── */
+@keyframes press-flash {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ── Keyboard flash (mirrors :active for key events) ────────── */
+.btn-num.key-flash  { background: var(--num-prs) !important; transform: translateY(1px); }
+.btn-op.key-flash   { background: var(--op-prs)  !important; transform: translateY(1px); }
+.btn-eq.key-flash   { background: var(--eq-prs)  !important; transform: translateY(1px); }
+.btn-cl.key-flash   { background: var(--cl-prs)  !important; transform: translateY(1px); }
+.btn-fn.key-flash   { background: var(--fn-prs)  !important; transform: translateY(1px); }
+
+/* ── Responsive fallback for very small screens ─────────────── */
+@media (max-width: 440px) {
+  .calc-shell {
+    width: 100vw;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* ── Scrollable page on short screens ──────────────────────── */
+@media (max-height: 750px) {
+  body {
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+}

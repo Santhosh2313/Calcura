@@ -1,0 +1,19 @@
+# Python desktop app artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyw.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (if ever added)
+node_modules/
