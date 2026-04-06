@@ -24,11 +24,3 @@ You must have Python installed. No external libraries required.
 ```bash
 python calculator.py
 ```
-
-## Deployment (Vercel)
-This repository is configured for immediate deployment to Vercel via the included `vercel.json`.
-
-1. Push this repository to GitHub.
-2. Log into [Vercel](https://vercel.com/) and click "Add New Project".
-3. Import this repository.
-4. Leave all settings as default and click "Deploy".
